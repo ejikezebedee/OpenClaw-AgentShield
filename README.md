@@ -67,6 +67,20 @@ It focuses on:
 
 AgentShield should not promise impossible "bulletproof" protection. The enterprise-grade promise is layered reduction of AI-agent risk through isolation, least privilege, policy enforcement, scanning, logging, human approval gates, and continuous testing.
 
+## Commercial Package
+
+The open-source repository contains the defensive scanner, policy engine, examples, reports, and buyer-facing documentation under Apache-2.0.
+
+For the complete v0.2.0 production suite zip, use the prepared commercial asset stack:
+
+- Package filename: `OpenClaw-AgentShield-v0.2.0-Mythos-Ready.zip`
+- Listing copy: `docs/gumroad-listing.md`
+- Buyer quickstart: `docs/buyer-quickstart.md`
+- Sales page copy: `docs/sales-page-copy.md`
+- Release audit: `docs/final-release-audit.md`
+
+After publishing the Gumroad product, replace this note with the live Gumroad URL.
+
 ## License
 
 OpenClaw AgentShield is released under the Apache License 2.0. See `LICENSE`.
@@ -109,11 +123,75 @@ Fail a CI/checklist step when risky content is found:
 python3 -m agentshield.cli examples --fail-on-risk
 ```
 
+## Visual CLI Proof
+
+Example pretty output from a blocked data-exfiltration prompt:
+
+```text
+$ python3 -m agentshield.cli examples/risky-exfiltration.txt --pretty
+{
+  "decision": "block",
+  "risk_score": 95,
+  "summary": {
+    "data_exfiltration": 1
+  },
+  "findings": [
+    {
+      "rule_id": "AS-DE-001",
+      "category": "data_exfiltration",
+      "severity": "critical",
+      "decision": "block",
+      "description": "Attempts to move protected data outside the trusted boundary.",
+      "impact": "Sensitive data, credentials, or customer records may be exposed to an untrusted destination.",
+      "recommendation": "Block the action, verify destination trust, and ensure secrets are never available in agent context."
+    }
+  ]
+}
+```
+
+Example report generation for audit evidence:
+
+```bash
+python3 -m agentshield.cli examples \
+  --pretty \
+  --report reports/examples-scan.json \
+  --markdown-report reports/examples-scan.md
+```
+
 Run tests:
 
 ```bash
 python3 -m unittest discover -s tests
 ```
+
+## OpenClaw Integration Notes
+
+AgentShield can scan any local agent workspace, memory export, log folder, tool manifest directory, or document-ingestion staging folder before content is trusted by an agent loop.
+
+Example local workspace sweep:
+
+```bash
+python3 -m agentshield.cli "$HOME/.openclaw/workspace" \
+  --policy policies/default-policy.json \
+  --report reports/openclaw-workspace-scan.json \
+  --markdown-report reports/openclaw-workspace-scan.md \
+  --fail-on-risk
+```
+
+Example targeted scans:
+
+```bash
+python3 -m agentshield.cli "$HOME/.openclaw/workspace/memory" --pretty
+python3 -m agentshield.cli "$HOME/.openclaw/workspace/logs" --pretty
+python3 -m agentshield.cli "$HOME/.openclaw/workspace/policies" --pretty
+```
+
+Recommended integration pattern:
+
+1. Treat web pages, PDFs, emails, issue comments, tool output, and memory writes as untrusted input.
+2. Scan content before it enters privileged agent context.
+3. Quarantine or require approval for risky instructions, tool manifests, memory writes, and data-egress requests.
+4. Save JSON and Markdown reports as release, compliance, or incident-review evidence.
 
 ## What The Decisions Mean
 
@@ -141,3 +219,9 @@ If a scan returns `block` or `approval_required`, open the JSON or Markdown repo
 Mythos-ready reports also include impact and recommended fix fields so buyers can move from detection to practical governance action.
 
 If the scanner misses a company-specific risk phrase, add or adjust rules in `policies/default-policy.json`.
+
+## Security Disclaimer
+
+AgentShield is a defensive auditing and policy-validation toolkit. It is designed to improve AI-agent isolation, review untrusted content, detect risky instructions, support human approval gates, and produce audit evidence.
+
+It is not a mathematical guarantee against every prompt injection, zero-day vulnerability, model failure, unsafe integration, or malicious actor. Production deployments should combine AgentShield with least-privilege permissions, secret isolation, egress controls, human approval for high-impact actions, logging, monitoring, dependency review, and regular security testing.
