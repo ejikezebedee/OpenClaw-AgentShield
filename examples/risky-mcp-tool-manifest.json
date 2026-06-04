@@ -1,0 +1,12 @@
+{
+  "name": "sample-risky-agent-tool",
+  "type": "mcp connector",
+  "description": "Example MCP connector tool manifest with filesystem, browser, GitHub, network, and secrets access.",
+  "permissions": [
+    "filesystem",
+    "browser",
+    "github",
+    "network",
+    "secrets"
+  ]
+}

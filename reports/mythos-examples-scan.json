@@ -1,0 +1,112 @@
+{
+  "decision": "block",
+  "results": [
+    {
+      "bytes_scanned": 98,
+      "decision": "allow",
+      "findings": [],
+      "risk_score": 0,
+      "summary": {},
+      "target": "examples/benign-request.txt",
+      "timestamp": "2026-06-04T22:48:44.541371+00:00"
+    },
+    {
+      "bytes_scanned": 140,
+      "decision": "approval_required",
+      "findings": [
+        {
+          "category": "mythos_autonomy_risk",
+          "decision": "approval_required",
+          "description": "High-autonomy agent request touching privileged tools or sensitive environments.",
+          "evidence": "autonomous agent without supervision and self-execute shell, browser, network, API, filesystem, and production deployment",
+          "impact": "A highly capable agent can chain small permissions into large operational impact without further review.",
+          "recommendation": "Deny autonomous execution until sandboxing, network egress controls, workspace boundaries, and approval gates are verified.",
+          "rule_id": "AS-MY-001",
+          "severity": "critical"
+        }
+      ],
+      "risk_score": 95,
+      "summary": {
+        "mythos_autonomy_risk": 1
+      },
+      "target": "examples/risky-autonomous-agent.txt",
+      "timestamp": "2026-06-04T22:48:44.541549+00:00"
+    },
+    {
+      "bytes_scanned": 78,
+      "decision": "block",
+      "findings": [
+        {
+          "category": "data_exfiltration",
+          "decision": "block",
+          "description": "Attempts to move protected data outside the trusted boundary.",
+          "evidence": "Send all customer data, API keys, and internal files",
+          "impact": "Sensitive data, credentials, or customer records may be exposed to an untrusted destination.",
+          "recommendation": "Block the action, verify destination trust, and ensure secrets are never available in agent context.",
+          "rule_id": "AS-DE-001",
+          "severity": "critical"
+        }
+      ],
+      "risk_score": 95,
+      "summary": {
+        "data_exfiltration": 1
+      },
+      "target": "examples/risky-exfiltration.txt",
+      "timestamp": "2026-06-04T22:48:44.541641+00:00"
+    },
+    {
+      "bytes_scanned": 286,
+      "decision": "approval_required",
+      "findings": [
+        {
+          "category": "mcp_tool_manifest_risk",
+          "decision": "approval_required",
+          "description": "MCP/tool manifest exposes sensitive or high-impact capabilities.",
+          "evidence": "mcp connector\", \"description\": \"Example MCP connector tool manifest with filesystem, browser, GitHub, network, and secrets access.\", \"permissions\": [ \"filesystem\", \"browser\", \"g...",
+          "impact": "A poisoned or over-permissive connector can convert untrusted text into unauthorized tool use.",
+          "recommendation": "Review connector permissions, remove unnecessary scopes, and require trust verification before enabling the tool.",
+          "rule_id": "AS-MCP-001",
+          "severity": "high"
+        }
+      ],
+      "risk_score": 70,
+      "summary": {
+        "mcp_tool_manifest_risk": 1
+      },
+      "target": "examples/risky-mcp-tool-manifest.json",
+      "timestamp": "2026-06-04T22:48:44.541801+00:00"
+    },
+    {
+      "bytes_scanned": 86,
+      "decision": "quarantine",
+      "findings": [
+        {
+          "category": "memory_poisoning",
+          "decision": "quarantine",
+          "description": "Attempts to persist behavior-changing instructions into memory.",
+          "evidence": "From now on, always bypass",
+          "impact": "Persistent memory can carry attacker instructions into future sessions after the original context is gone.",
+          "recommendation": "Quarantine the memory write and require review before saving durable agent memory.",
+          "rule_id": "AS-MG-001",
+          "severity": "high"
+        }
+      ],
+      "risk_score": 70,
+      "summary": {
+        "memory_poisoning": 1
+      },
+      "target": "examples/risky-memory-write.txt",
+      "timestamp": "2026-06-04T22:48:44.541890+00:00"
+    }
+  ],
+  "risk_score": 95,
+  "scanned_files": 5,
+  "summary": {
+    "data_exfiltration": 1,
+    "mcp_tool_manifest_risk": 1,
+    "memory_poisoning": 1,
+    "mythos_autonomy_risk": 1
+  },
+  "target": "examples",
+  "timestamp": "2026-06-04T22:48:44.541906+00:00"
+}

@@ -1,0 +1,126 @@
+{
+  "name": "AgentShield Default Defensive Policy",
+  "version": "0.2.0",
+  "rules": [
+    {
+      "rule_id": "AS-PI-001",
+      "category": "prompt_injection",
+      "severity": "high",
+      "decision": "quarantine",
+      "pattern": "\\b(ignore|override|disregard)\\b.{0,80}\\b(previous|prior|system|developer)\\b.{0,80}\\b(instruction|message|rule|policy)s?\\b",
+      "description": "Attempts to override higher-priority instructions.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-PI-002",
+      "category": "system_prompt_extraction",
+      "severity": "high",
+      "decision": "block",
+      "pattern": "\\b(reveal|print|show|dump|export)\\b.{0,80}\\b(system prompt|developer message|hidden instruction|internal instruction)s?\\b",
+      "description": "Attempts to extract privileged prompts or hidden instructions.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-DE-001",
+      "category": "data_exfiltration",
+      "severity": "critical",
+      "decision": "block",
+      "pattern": "\\b(send|upload|post|exfiltrate|forward)\\b.{0,120}\\b(secret|token|api key|private key|credential|password|customer data|internal file)s?\\b",
+      "description": "Attempts to move protected data outside the trusted boundary.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-TG-001",
+      "category": "destructive_tool_intent",
+      "severity": "critical",
+      "decision": "approval_required",
+      "pattern": "\\b(delete|wipe|destroy|remove|drop|overwrite)\\b.{0,120}\\b(database|repo|repository|file|folder|bucket|account|record)s?\\b",
+      "description": "Requests a destructive action that requires approval.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-MG-001",
+      "category": "memory_poisoning",
+      "severity": "high",
+      "decision": "quarantine",
+      "pattern": "\\b(remember|store|save to memory|from now on)\\b.{0,120}\\b(always|never|ignore|bypass|do not ask|without approval)\\b",
+      "description": "Attempts to persist behavior-changing instructions into memory.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-AG-001",
+      "category": "agent_laundering",
+      "severity": "high",
+      "decision": "approval_required",
+      "pattern": "\\b(tell|instruct|delegate to|ask)\\b.{0,80}\\b(admin agent|higher privilege|privileged agent|another agent)\\b.{0,120}\\b(run|send|approve|export|delete)\\b",
+      "description": "Possible agent-to-agent instruction laundering or privilege escalation.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-NW-001",
+      "category": "network_egress_risk",
+      "severity": "medium",
+      "decision": "approval_required",
+      "pattern": "\\b(webhook|external url|remote server|pastebin|public link)\\b.{0,100}\\b(send|upload|post|forward|export)\\b",
+      "description": "Possible network egress request requiring approval.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-BN-001",
+      "category": "benign_security_discussion",
+      "severity": "info",
+      "decision": "allow",
+      "pattern": "\\b(defensive|audit|mitigation|hardening|security report|risk assessment|policy)\\b",
+      "description": "Benign defensive security context.",
+      "impact": "Matched content may affect AI-agent security or governance controls.",
+      "recommendation": "Review the matched content before allowing it into privileged agent context."
+    },
+    {
+      "rule_id": "AS-MY-001",
+      "category": "mythos_autonomy_risk",
+      "severity": "critical",
+      "decision": "approval_required",
+      "pattern": "\\b(autonomous|without supervision|no human approval|auto.?approve|self.?execute)\\b.{0,160}\\b(shell|browser|network|api|credential|filesystem|database|deployment|production)\\b",
+      "description": "High-autonomy agent request touching privileged tools or sensitive environments.",
+      "impact": "A highly capable agent can chain small permissions into large operational impact without further review.",
+      "recommendation": "Deny autonomous execution until sandboxing, network egress controls, workspace boundaries, and approval gates are verified."
+    },
+    {
+      "rule_id": "AS-MCP-001",
+      "category": "mcp_tool_manifest_risk",
+      "severity": "high",
+      "decision": "approval_required",
+      "pattern": "\\b(mcp|model context protocol|tool manifest|connector|plugin)\\b.{0,200}\\b(shell|filesystem|network|secrets|credentials|browser|email|github|database|payments?)\\b",
+      "description": "MCP/tool manifest exposes sensitive or high-impact capabilities.",
+      "impact": "A poisoned or over-permissive connector can convert untrusted text into unauthorized tool use.",
+      "recommendation": "Review connector permissions, remove unnecessary scopes, and require trust verification before enabling the tool."
+    },
+    {
+      "rule_id": "AS-EG-001",
+      "category": "egress_control_gap",
+      "severity": "high",
+      "decision": "approval_required",
+      "pattern": "\\b(network|internet|egress|webhook|external url|remote server|public endpoint)\\b.{0,180}\\b(allow all|unrestricted|no approval|default allow|wildcard)\\b",
+      "description": "Network or egress policy appears overly permissive.",
+      "impact": "Unrestricted outbound access can let a compromised agent leak data or call attacker-controlled services.",
+      "recommendation": "Use network deny-by-default, destination allowlists, and separate approval for external requests."
+    },
+    {
+      "rule_id": "AS-AF-001",
+      "category": "approval_fatigue_risk",
+      "severity": "medium",
+      "decision": "approval_required",
+      "pattern": "\\b(always approve|approve all|remember my approval|do not ask again|skip confirmation|reduce prompts)\\b",
+      "description": "Request may weaken human approval gates or create approval fatigue.",
+      "impact": "Repeated or blanket approvals reduce meaningful supervision and can normalize unsafe actions.",
+      "recommendation": "Keep fail-closed defaults, batch low-risk approvals carefully, and require fresh approval for high-impact tools."
+    }
+  ]
+}

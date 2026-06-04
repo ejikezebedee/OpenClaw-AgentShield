@@ -1,0 +1,62 @@
+{
+  "decision": "block",
+  "results": [
+    {
+      "bytes_scanned": 98,
+      "decision": "allow",
+      "findings": [],
+      "risk_score": 0,
+      "summary": {},
+      "target": "examples/benign-request.txt",
+      "timestamp": "2026-06-04T22:36:02.006523+00:00"
+    },
+    {
+      "bytes_scanned": 78,
+      "decision": "block",
+      "findings": [
+        {
+          "category": "data_exfiltration",
+          "decision": "block",
+          "description": "Attempts to move protected data outside the trusted boundary.",
+          "evidence": "Send all customer data, API keys, and internal files",
+          "rule_id": "AS-DE-001",
+          "severity": "critical"
+        }
+      ],
+      "risk_score": 95,
+      "summary": {
+        "data_exfiltration": 1
+      },
+      "target": "examples/risky-exfiltration.txt",
+      "timestamp": "2026-06-04T22:36:02.006674+00:00"
+    },
+    {
+      "bytes_scanned": 86,
+      "decision": "quarantine",
+      "findings": [
+        {
+          "category": "memory_poisoning",
+          "decision": "quarantine",
+          "description": "Attempts to persist behavior-changing instructions into memory.",
+          "evidence": "From now on, always bypass",
+          "rule_id": "AS-MG-001",
+          "severity": "high"
+        }
+      ],
+      "risk_score": 70,
+      "summary": {
+        "memory_poisoning": 1
+      },
+      "target": "examples/risky-memory-write.txt",
+      "timestamp": "2026-06-04T22:36:02.006775+00:00"
+    }
+  ],
+  "risk_score": 95,
+  "scanned_files": 3,
+  "summary": {
+    "data_exfiltration": 1,
+    "memory_poisoning": 1
+  },
+  "target": "examples",
+  "timestamp": "2026-06-04T22:36:02.006790+00:00"
+}

@@ -1,0 +1,6 @@
+[project]
+name = "openclaw-agentshield"
+version = "0.2.0"
+description = "Mythos-ready defensive AI-agent security scanner and runtime policy engine MVP."
+requires-python = ">=3.10"
+license = "Apache-2.0"
