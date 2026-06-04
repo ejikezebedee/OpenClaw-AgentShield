@@ -1,5 +1,7 @@
 # OpenClaw AgentShield
 
+![OpenClaw AgentShield product cover](assets/agentshield-product-cover.svg)
+
 AI Agent Security Audit Toolkit for teams deploying AI agents, LLM apps, RAG workflows, tool-using assistants, and autonomous automations.
 
 AgentShield is a defensive local scanner and policy toolkit that helps buyers find risky instructions before AI agents ingest files, save memory, run tools, or pass context to another agent.
